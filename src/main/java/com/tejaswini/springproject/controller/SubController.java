@@ -2,7 +2,9 @@ package com.tejaswini.springproject.controller;
 
 import com.tejaswini.springproject.dao.Submission;
 import com.tejaswini.springproject.service.SubService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,28 +17,28 @@ public class SubController {
     @Autowired
     private SubService subService;
     @PostMapping
-    public Submission addSubmission(@RequestBody Submission submission){
-        return subService.addSubmission(submission);
+    public ResponseEntity<Submission> addSubmission(@Valid @RequestBody Submission submission){
+        return ResponseEntity.status(HttpStatus.CREATED).body(subService.addSubmission(submission));
 
     }
     @GetMapping
-    public List<Submission> getAllSubmissions(){
-        return subService.getAllSubmissions();
+    public  ResponseEntity<List<Submission>> getAllSubmissions(){
+        return ResponseEntity.status(HttpStatus.OK).body(subService.getAllSubmissions());
     }
     @GetMapping("/{id}")
-    public Submission getById(@PathVariable int id){
+    public ResponseEntity<Submission> getById(@PathVariable int id){
 
-        return subService.getById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(subService.getById(id));
     }
     @DeleteMapping("/{id}")
-    public String deleteSubmission(@PathVariable int id){
+    public  ResponseEntity<String> deleteSubmission(@PathVariable int id){
         subService.deleteSubmission(id);
-        return "Deleted";
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Deleted");
 
     }
 
     @PutMapping("/{id}")
-    public Submission updateSub(@PathVariable("id") Integer id, @RequestBody Submission submission) {
-        return subService.updateSub(id, submission);
+    public  ResponseEntity<Submission> updateSub(@Valid @PathVariable("id") Integer id, @RequestBody Submission submission) {
+        return ResponseEntity.status(HttpStatus.OK).body(subService.updateSub(id, submission));
     }
 }
